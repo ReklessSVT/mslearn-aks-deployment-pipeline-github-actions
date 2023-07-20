@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "Defining variables..."
-export RESOURCE_GROUP_NAME=mslearn-gh-pipelines-$RANDOM
+export RESOURCE_GROUP_NAME=mslearn-gh-pipelines-jsv
 export AKS_NAME=contoso-video
-export ACR_NAME=contosocontainerregistry$RANDOM
+export ACR_NAME=contosocontainerregistryjsv
 
 echo "Searching for resource group..."
 az group create -n $RESOURCE_GROUP_NAME -l eastus
@@ -26,8 +26,8 @@ echo "Creating ACR..."
 az acr create -n $ACR_NAME -g $RESOURCE_GROUP_NAME --sku basic
 az acr update -n $ACR_NAME --admin-enabled true
 
-export ACR_USERNAME=$(az acr credential show -n $ACR_NAME --query "username" -o tsv)
-export ACR_PASSWORD=$(az acr credential show -n $ACR_NAME --query "passwords[0].value" -o tsv)
+export ACR_USERNAME=$(az acr credential show -n $ACR_NAME -g $RESOURCE_GROUP_NAME --query "username" -o tsv)
+export ACR_PASSWORD=$(az acr credential show -n $ACR_NAME -g $RESOURCE_GROUP_NAME  --query "passwords[0].value" -o tsv)
 
 az aks update \
     --name $AKS_NAME \
